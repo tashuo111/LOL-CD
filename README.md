@@ -2,7 +2,7 @@
 
 这是基于 [lkfun/Timer](https://github.com/lkfun/Timer) 修改的独立个人备份，仓库保存当前 1.9.1 源码，便携运行包保存在 GitHub Releases。它不是原作者的官方新版，也不是 League Akari 或 Riot Games 的官方产品。
 
-## 下载与运行
+## 下载与运行 有封号风险  游戏内发送记录如果无法使用 可以用豆包 codex之类AI应用尝试修复
 
 [下载 Windows 64 位便携包](https://github.com/tashuo111/LOL-CD/releases/latest/download/Timer-1.9.1-win-x64.zip) · [SHA-256 校验值](https://github.com/tashuo111/LOL-CD/releases/latest/download/SHA256SUMS.txt)
 
