@@ -1,0 +1,34 @@
+using System;
+using System.Windows;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+
+namespace Timer
+{
+    /// <summary>
+    /// Window1.xaml 的交互逻辑
+    /// </summary>
+    public partial class FlowWindow : Window
+    {
+        public FlowWindow()
+        {
+            InitializeComponent();
+            SourceInitialized += delegate
+            {
+                IntPtr hwnd = new WindowInteropHelper(this).Handle;
+                uint extendedStyle = GetWindowLong(hwnd, GwlExstyle);
+                if (AllowsTransparency) SetWindowLong(hwnd, GwlExstyle, extendedStyle | WsExTransparent | 0x08000000);
+            };
+        }
+        private const int WsExTransparent = 0x20;
+        private const int GwlExstyle = (-20);
+
+        [DllImport("user32", EntryPoint = "SetWindowLong")]
+        private static extern uint SetWindowLong(IntPtr hwnd, int nIndex, uint dwNewLong);
+
+        [DllImport("user32", EntryPoint = "GetWindowLong")]
+        private static extern uint GetWindowLong(IntPtr hwnd, int nIndex);
+
+
+    }
+}

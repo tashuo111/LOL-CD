@@ -1,0 +1,28 @@
+{
+  "MayhemMode": false,
+  "MayhemCooldownSeconds": [
+    176.47,
+    176.47,
+    176.47,
+    176.47,
+    176.47
+  ],
+  "EnableGameSend": true,
+  "VoiceEnabled": true,
+  "GameSendHotkey": "X",
+  "CopyHotkey": "F7",
+  "GameSendCooldownMs": 1000,
+  "RecordHotkeys": [
+    "Ctrl+D1",
+    "Ctrl+D2",
+    "Ctrl+D3",
+    "Ctrl+D4",
+    "Ctrl+D5"
+  ],
+  "ResetHotkey": "Decimal",
+  "AddHotkey": "Add",
+  "SubtractHotkey": "Subtract",
+  "OverlayHotkey": "NumPad0",
+  "OverlayTop": 125,
+  "OverlayLeft": 80
+}

@@ -1,0 +1,214 @@
+<Window x:Class="Timer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Timer"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="闪现计时器 1.9.1" Height="630" Width="693" FontFamily="Consolas,Microsoft YaHei UI"  ResizeMode="NoResize" Closed="Window_Closed" x:Name="mainwindow" Icon="sanae.ico">
+    <Window.Resources>
+        <Style x:Key="BaseStyle">
+            <Setter Property="Control.FontSize" Value="18"/>
+            <Setter Property="Control.VerticalAlignment" Value="Top"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Left"/>
+            <Setter Property="Control.Foreground" Value="#304455"/>
+        </Style>
+        <Style x:Key="BaseBottonStyle" BasedOn="{StaticResource BaseStyle}">
+            <Setter Property="Control.Width" Value="30"/>
+            <Setter Property="Control.Height" Value="30"/>
+            <Setter Property="Control.Foreground" Value="White"/>
+            <Setter Property="Control.Background" Value="#FF4F87C0"/>
+            <Setter Property="Control.BorderBrush" Value="#FF4F87C0"/>
+        </Style>
+        <Style x:Key="BottonStyle" BasedOn="{StaticResource BaseBottonStyle}" TargetType="Button">
+            <Setter Property="Control.Width" Value="100"/>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LableStyle" BasedOn="{StaticResource BaseStyle}">
+            <Setter Property="Control.Height" Value="30"/>
+            <Setter Property="Control.Width" Value="150"/>
+        </Style>
+        <Style x:Key="CheckBoxStyle" BasedOn="{StaticResource BaseStyle}">
+            <Setter Property="Control.Height" Value="30"/>
+            <Setter Property="Control.Width" Value="100"/>
+        </Style>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type Button}" >
+            <Border  BorderThickness="1" CornerRadius="7,7,7,7" Background="#FF4F87C0" Style="{StaticResource BottonStyle}">
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </ControlTemplate>
+        <Style x:Key="myStyle" TargetType="Button" BasedOn="{StaticResource BottonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Red" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <LinearGradientBrush x:Key="LinearGradientBlueBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            
+            <GradientStop Color="#FF377FED" Offset="0" />
+            
+            <GradientStop Color="#FF074CC0" Offset="1" />
+            
+        </LinearGradientBrush>
+        
+        <SolidColorBrush x:Key="MyBtnBorderColor" Color="#FF2D78F4"></SolidColorBrush>
+        
+        <SolidColorBrush x:Key="MyBtnHoverBackgroundColor" Color="#FF317EF3"></SolidColorBrush>
+
+
+        <Style x:Key="FilletButton" TargetType="{x:Type Button}" >
+
+            <Setter Property="Background" Value="{StaticResource LinearGradientBlueBackground}"></Setter>
+
+            <Setter Property="Foreground" Value="White"></Setter>
+
+            <Setter Property="BorderBrush" Value="{StaticResource MyBtnBorderColor}"></Setter>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" 
+                                 SnapsToDevicePixels="true" CornerRadius="6,6,6,6">
+
+                            <ContentPresenter x:Name="contentPresenter" 
+                                               Focusable="False" 
+                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                               Margin="{TemplateBinding Padding}" 
+                                               RecognizesAccessKey="True" 
+                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"  />
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="true">
+
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource MyBtnHoverBackgroundColor}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+    </Window.Resources>
+
+    <Grid AllowDrop="True" Margin="0,-6,1,12" Background="White" >
+
+        <Button x:Name="GameButton" Content="游戏开始"  Margin="20,20,0,0"  Style="{StaticResource BottonStyle}" Click="GameButton_Click"  >
+
+        </Button>
+        <Label x:Name="Game" Content="0:00"  Margin="140,20,0,0" Style="{StaticResource LableStyle}"/>
+        <Button x:Name="GameAdd" Content="+"  Margin="300,20,0,0" Style="{StaticResource BaseBottonStyle}" Click="GameAdd_Click"/>
+        <Button x:Name="GameSubtract" Content="-"  Margin="335,20,0,0"  Style="{StaticResource BaseBottonStyle}" Click="GameSubtract_Click"/>
+
+        <ComboBox x:Name="ModeSelector" Margin="390,20,0,0" Width="260" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" SelectionChanged="ModeChanged"><ComboBoxItem Content="常规模式（五路）"/><ComboBoxItem Content="海克斯大乱斗（1–5楼）"/></ComboBox>
+        <Label Name="TopLabel" Content="就绪"  Margin="140,60,0,0" Style="{StaticResource LableStyle}"/>
+        <Button Name="TopButton" Content="上路"  Margin="20,60,0,0"   Click="TopButton_Click" Style="{StaticResource BottonStyle}"/>
+        <Button Name="TopAdd" Content="+"  Margin="300,60,0,0"  Style="{StaticResource BaseBottonStyle}" Click="TopAdd_Click"/>
+        <Button Name="TopSubtract" Content="-"  Margin="335,60,0,0"  Style="{StaticResource BaseBottonStyle}" Click="TopSubtract_Click"/>
+        <Button Name="TopClear" Content="归零"  Margin="373,60,0,0"  Style="{StaticResource BottonStyle}" Click="TopClear_Click"/>
+        <CheckBox Name="TopBoot" Content="明朗鞋"  Margin="489,65,0,0" Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox Name="TopStar" Content="星界" Margin="576,65,0,0"  Style="{StaticResource CheckBoxStyle}"/>
+
+        <Label Name="Jug" Content="就绪"  Margin="140,100,0,0" Style="{StaticResource LableStyle}"/>
+        <Button Name="JugButton" Content="打野"  Margin="20,100,0,0" Click="JugButton_Click" Style="{StaticResource BottonStyle}"/>
+        <Button Name="JugAdd" Content="+"  Margin="300,100,0,0"  Style="{StaticResource BaseBottonStyle}" Click="JugAdd_Click"/>
+        <Button Name="JugSubtract" Content="-"  Margin="335,100,0,0"  Style="{StaticResource BaseBottonStyle}" Click="JugSubtract_Click"/>
+        <Button Name="JugClear" Content="归零"  Margin="373,100,0,0"  Click="JugClear_Click" Style="{StaticResource BottonStyle}"/>
+        <CheckBox Name="JugBoot" Content="明朗鞋"  Margin="489,106,0,0"  Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="JugStar" Content="星界" Margin="576,104,0,0" Style="{StaticResource CheckBoxStyle}"/>
+
+        <Label Name="Mid" Content="就绪"  Margin="140,140,0,0" Style="{StaticResource LableStyle}"/>
+        <Button Name="MidButton" Content="中路"  Margin="20,140,0,0"  Click="MidButton_Click" Style="{StaticResource BottonStyle}"/>
+        <Button Name="MidAdd" Content="+" Margin="300,140,0,0"  Style="{StaticResource BaseBottonStyle}" Click="MidAdd_Click"/>
+        <Button Name="MidSubtract" Content="-"  Margin="335,140,0,0"  Style="{StaticResource BaseBottonStyle}" Click="MidSubtract_Click"/>
+        <Button Name="MidClear" Content="归零"  Margin="373,140,0,0"  Click="MidClear_Click" Style="{StaticResource BottonStyle}"/>
+        <CheckBox Name="MidBoot" Content="明朗鞋"  Margin="489,145,0,0"  Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="MidStar" Content="星界" Margin="576,144,0,0" Style="{StaticResource CheckBoxStyle}"/>
+
+        <Label Name="Bot" Content="就绪"  Margin="140,180,0,0" Style="{StaticResource LableStyle}"/>
+        <Button Name="BotButton" Content="下路" Margin="20,180,0,0"  Click="BotButton_Click" Style="{StaticResource BottonStyle}"/>
+        <Button Name="BotAdd" Content="+"  Margin="300,180,0,0"  Style="{StaticResource BaseBottonStyle}" Click="BotAdd_Click"/>
+        <Button Name="BotSubtract" Content="-"  Margin="335,180,0,0"  Style="{StaticResource BaseBottonStyle}" Click="BotSubtract_Click"/>
+        <Button Name="BotClear" Content="归零"  Margin="373,180,0,0" Click="BotClear_Click" Style="{StaticResource BottonStyle}"/>
+        <CheckBox Name="BotBoot" Content="明朗鞋" Margin="489,184,0,0" Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="BotStar" Content="星界" Margin="576,184,0,0" Style="{StaticResource CheckBoxStyle}"/>
+
+        <Label Name="Sup" Content="就绪"  Margin="140,220,0,0" Style="{StaticResource LableStyle}"/>
+        <Button Name="SupButton" Content="辅佐"  Margin="20,220,0,0"   Click="SupButton_Click" Style="{StaticResource BottonStyle}"/>
+        <Button Name="SupAdd" Content="+"  Margin="300,220,0,0"  Style="{StaticResource BaseBottonStyle}" Click="SupAdd_Click"/>
+        <Button Name="SupSubtract" Content="-" Margin="335,220,0,0" Style="{StaticResource BaseBottonStyle}" Click="SupSubtract_Click"/>
+        <Button Name="SupClear" Content="归零"  Margin="373,220,0,0"  Click="SupClear_Click" Style="{StaticResource BottonStyle}"/>
+        <CheckBox Name="SupBoot" Content="明朗鞋" Margin="489,226,0,0" Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="SupStar" Content="星界" Margin="576,225,0,0" Style="{StaticResource CheckBoxStyle}"/>
+
+
+        <CheckBox x:Name="chkVoice" Content="语音播放" Click="VoiceToggle_Click" Margin="20,265,0,0" Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="chkEnableKey" Content="快捷键"  Margin="140,265,0,0" IsChecked="True" Click="ToggleHotkeys_Click" Style="{StaticResource CheckBoxStyle}"/>
+        <CheckBox x:Name="chkSwitch" Content="弹窗"  Margin="255,265,0,0"  Click="Switch"  Style="{StaticResource CheckBoxStyle}"/>
+        <Button Name="WindowEdit" Content="位置编辑"  Margin="373,260,0,0"  ToolTip="编辑弹窗位置" Click="WindowEditFun" Style="{StaticResource BottonStyle}"/>
+
+
+        <Label x:Name="HotkeyHint" Content="小键盘默认快捷键：&#xA;. 重置&#x9;+ 时长&#x9;- 时长&#x9;0 开启/关闭浮窗&#x9;&#xA;F1 上路&#x9;F2 打野&#x9;F3 中路&#x9;F4下路&#x9;F5 辅助" Margin="20,300,0,0" Height="76" Style="{StaticResource BaseStyle}"/>
+
+            <StackPanel Margin="20,382,20,0" VerticalAlignment="Top">
+            <TextBlock Text="团队信息" FontSize="18" Foreground="#304455"/>
+            <TextBox x:Name="TeamText" Text="" IsReadOnly="True" FontSize="15" Margin="0,6,0,8" Padding="6"/>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="CopyButton" Content="生成文本 F7" Width="160" Style="{StaticResource BottonStyle}" ToolTip="生成后自动复制到剪贴板" Click="Generate_Click"/>
+                <Button Content="发送设置" Style="{StaticResource BottonStyle}" Margin="10,0,0,0" Click="Settings_Click"/>
+                <Button Content="测试语音" Style="{StaticResource BottonStyle}" Margin="10,0,0,0" Click="VoiceTest_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Text="发送我方" FontSize="18" Width="110" VerticalAlignment="Center"/>
+                <TextBlock Text="快捷键" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <Button Content="选择" Width="55" Style="{StaticResource BottonStyle}" Click="SelectSendHotkey_Click"/>
+                <TextBlock x:Name="SelectedSendHotkey" Text="F6" FontSize="15" Width="125" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                <Button x:Name="SendButton" Content="发送" Style="{StaticResource BottonStyle}" Click="SendHint_Click"/>
+                <Button Content="试运行" Style="{StaticResource BottonStyle}" Margin="10,0,0,0" Click="Generate_Click"/>
+            </StackPanel>
+            <TextBlock x:Name="HotkeyStatus" Text="快捷键：等待启动" FontSize="12" Foreground="#304455" Margin="0,6,0,0"/>
+            <TextBlock x:Name="SendStatus" FontSize="13" Foreground="#304455" Margin="0,7,0,0" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>
+</Window>
+
+
+
+

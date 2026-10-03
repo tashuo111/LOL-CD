@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF>
+    <ApplicationIcon>sanae.ico</ApplicationIcon><ApplicationManifest>app.manifest</ApplicationManifest>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo><ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="sanae.ico" /><None Update="conf.ini" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
+  </ItemGroup>
+</Project>
+
