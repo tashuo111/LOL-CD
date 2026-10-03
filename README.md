@@ -31,7 +31,9 @@
 
 ## 已知限制
 
-**游戏内模拟输入失效的问题尚未解决。** X 松开后通过普通 Windows 输入 API 尝试 Enter → 文本 → Enter；即使 Windows 返回成功，也不能证明游戏已接收到消息。必须游戏在前台、聊天框原本关闭，发送间隔至少 1 秒。程序不抢焦点、不提权、不绕过输入限制。如果游戏没有打开聊天框，请使用 **F7 → 手动 Enter → Ctrl+V → Enter**。界面的“发送”按钮提供操作提示，实际模拟输入由快捷键触发。
+**X 游戏内发送存在电脑之间的兼容性差异。** 用户已确认在当前电脑可以成功发送，但换另一台电脑失败，具体原因仍待诊断。X 松开后通过普通 Windows 输入 API 尝试 Enter → 文本 → Enter；即使 Windows 返回成功，也不能证明游戏已接收到消息。必须游戏在前台、聊天框原本关闭，发送间隔至少 1 秒。程序不抢焦点、不提权、不绕过输入限制。如果游戏没有打开聊天框，请使用 **F7 → 手动 Enter → Ctrl+V → Enter**。界面的“发送”按钮提供操作提示，实际模拟输入由快捷键触发。
+
+换电脑时请完整复制便携目录，确认发送设置中快捷键为 X、游戏内发送已开启，并且至少有一个正在冷却的记录。按 X 后可查看工具的快捷键状态及同目录 `last-send.json`，区分快捷键未触发、游戏未在前台和输入提交失败。工具与游戏的权限等级不同也可能阻止模拟输入，详见 [Microsoft SendInput 文档](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput)。
 
 大乱斗的 **176.47 秒是本版本保留的默认预设**（300÷1.7），不是对当前官方版本、所有装备或海克斯强化组合的最新结论。请以游戏内实际 CD 为准并修改对应楼层的数值。程序不自动识别强化、装备、多充能或刷新效果。恢复时间向上取整到秒，避免提前提示。
 
@@ -41,7 +43,7 @@
 
 ## 从源码构建
 
-需要 Windows 和 .NET 8 SDK。在仓库目录运行：
+需要 Windows 和 .NET SDK **8.0.425**。`global.json` 固定使用该 SDK 功能带，并允许兼容补丁版本（`rollForward: latestPatch`），不会自动选用 .NET 9/10 SDK。在仓库目录运行：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\build.ps1
@@ -49,11 +51,11 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 
 也可用 `-Dotnet "C:\路径\dotnet.exe"` 指定 SDK。脚本先运行测试，再发布自带运行时的 win-x64 程序，复制 `packaging/` 中的便携配置，并生成 ZIP 和 SHA-256 校验文件。结果位于 `artifacts/日期时间/`，可据此重建运行包。
 
-GitHub Actions 在推送 `main` 或手动运行时，使用 Windows 2022 和 .NET SDK 8.0.425 调用同一脚本。两个资产均上传成功后才发布 `v1.9.1`，已有正式发布会跳过，已有未完成草稿会报错并保留。源码提交不包含本地旧 `downloads/` 目录中的压缩包，下载请使用上面的 Releases 链接。
+GitHub Actions 在推送 `main` 或手动运行时，使用 Windows 2022 和 .NET SDK 8.0.425 调用同一脚本。该 Windows 镜像没有中文 SAPI 语音引擎，因此 CI 显式传入 `-SkipChineseVoiceTest`，仅执行其余 **31 项**测试；脚本会输出警告，且任何已执行测试失败都会停止发布。两个资产均上传成功后才发布 `v1.9.1`，已有正式发布会跳过，已有未完成草稿会报错并保留。源码提交不包含本地旧 `downloads/` 目录中的压缩包，下载请使用上面的 Releases 链接。
 
 源码基础默认值仍为 F1～F5 记录、F6 发送，且默认关闭语音和发送；直接执行 `dotnet run` 不等于便携包配置。请使用上述脚本生成带 **Ctrl+1～5 / X / F7** 配置的完整包。没有 `portable.mode` 时，程序使用 `%LOCALAPPDATA%\LkfunTimer\settings.json`，首次运行可导入 `conf.ini`。
 
-测试覆盖计时与文本、快捷键、设置、语音和发送流程；测试通过不代表真实 LOL 游戏内发送成功。
+本机带中文语音引擎的验证结果为 **32/32 通过**，其中包含中文语音音频生成测试。脚本默认仍执行全部 32 项；只有显式传入 `-SkipChineseVoiceTest` 才排除该项，中文语音未因此获得 CI 验证。其余测试覆盖计时与文本、快捷键、设置和发送流程；测试通过不代表真实 LOL 游戏内发送成功。
 
 ## 来源与参考
 

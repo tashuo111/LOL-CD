@@ -1,5 +1,6 @@
 param(
-    [string]$Dotnet = 'dotnet'
+    [string]$Dotnet = 'dotnet',
+    [switch]$SkipChineseVoiceTest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -23,7 +24,12 @@ try {
         throw '.NET 8 SDK is required. Install it or pass -Dotnet with its dotnet.exe path.'
     }
     New-Item -ItemType Directory -Path $publishDirectory -Force | Out-Null
-    & $Dotnet test 'Timer.sln' -c Release --logger 'trx;LogFileName=tests.trx' --results-directory $testDirectory
+    $testArguments = @('test', 'Timer.sln', '-c', 'Release', '--logger', 'trx;LogFileName=tests.trx', '--results-directory', $testDirectory)
+    if ($SkipChineseVoiceTest) {
+        Write-Warning 'Chinese SAPI voice integration test is NOT executed. Only the other 31 tests will run; validate Chinese speech on a Windows computer with a Chinese voice installed.'
+        $testArguments += @('--filter', 'FullyQualifiedName!=Timer.Tests.VoiceTests.ChineseEngineProducesAudio')
+    }
+    & $Dotnet @testArguments
     if ($LASTEXITCODE -ne 0) { throw 'Tests failed; no release package was created.' }
 
     & $Dotnet publish 'Timer/Timer.csproj' -c Release -r win-x64 --self-contained true -o $publishDirectory '-p:DebugType=None' '-p:DebugSymbols=false'

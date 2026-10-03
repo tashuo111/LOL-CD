@@ -29,7 +29,8 @@ jobs:
 
       - name: Test and build portable package
         shell: pwsh
-        run: ./build.ps1
+        # Hosted Windows has no Chinese SAPI voice; this integration test passed locally.
+        run: ./build.ps1 -SkipChineseVoiceTest
 
       - name: Upload both assets and publish release
         shell: pwsh
@@ -51,7 +52,8 @@ jobs:
           $existing = $null
           $page = 1
           do {
-            $releases = @(Invoke-RestMethod -Method Get -Uri "$api/releases?per_page=100&page=$page" -Headers $headers)
+            $response = Invoke-RestMethod -Method Get -Uri "$api/releases?per_page=100&page=$page" -Headers $headers
+            $releases = @($response)
             $existing = $releases | Where-Object { $_.tag_name -eq $tag } | Select-Object -First 1
             $page++
           } while ($null -eq $existing -and $releases.Count -eq 100)
@@ -80,8 +82,8 @@ jobs:
           Ctrl+主键盘1～5记录，X松开尝试发送，F7生成并复制；只输出正在冷却的记录。
           支持常规与海克斯大乱斗模式，记录时静音、到期播报；大乱斗176.47秒仅为本版预设，请按游戏内实际CD调整。
 
-          游戏内模拟输入失效的问题尚未解决。若X未打开聊天框，请使用F7后手动Enter、Ctrl+V、Enter。
-          本仓库包含32项自动测试，工作流在测试通过后打包；这些测试不证明LOL游戏内发送成功。
+          用户已确认X在当前电脑能成功发送，但换另一台电脑失败；存在环境兼容性差异，具体原因待诊断。若X未打开聊天框，请使用F7后手动Enter、Ctrl+V、Enter。
+          本机32项测试通过。云端运行31项测试；因托管机器没有中文SAPI语音引擎，中文发声集成测试仅在本机验证。这些测试不证明LOL游戏内发送成功。
           SHA256SUMS.txt可用于校验压缩包。来源、配置与其他限制见仓库README。
           '@
           $createBody = @{
