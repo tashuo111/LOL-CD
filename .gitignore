@@ -262,3 +262,6 @@ __pycache__/
 # Local send diagnostics
 last-send.json
 
+# Release packages are published as GitHub Release assets.
+/downloads/
+

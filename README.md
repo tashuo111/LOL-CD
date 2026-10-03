@@ -1,10 +1,10 @@
 # 闪现计时器 1.9.1
 
-这是基于 [lkfun/Timer](https://github.com/lkfun/Timer) 修改的独立个人备份，保存当前 1.9.1 源码与便携运行包。它不是原作者的官方新版，也不是 League Akari 或 Riot Games 的官方产品。
+这是基于 [lkfun/Timer](https://github.com/lkfun/Timer) 修改的独立个人备份，仓库保存当前 1.9.1 源码，便携运行包保存在 GitHub Releases。它不是原作者的官方新版，也不是 League Akari 或 Riot Games 的官方产品。
 
 ## 下载与运行
 
-[下载 Windows 64 位便携包](downloads/Timer-1.9.1-win-x64.zip) · [SHA-256 校验值](downloads/SHA256SUMS.txt)
+[下载 Windows 64 位便携包](https://github.com/tashuo111/LOL-CD/releases/latest/download/Timer-1.9.1-win-x64.zip) · [SHA-256 校验值](https://github.com/tashuo111/LOL-CD/releases/latest/download/SHA256SUMS.txt)
 
 适用 Windows 10/11 64 位。完整解压到可写文件夹后，直接双击 **Timer.exe**，无需脚本或另装 .NET。请保留整个目录；不要只复制 EXE。窗口标题显示“闪现计时器 1.9.1”。如果提示已运行，请先正常退出旧版。
 
@@ -47,7 +47,9 @@
 powershell -ExecutionPolicy Bypass -File .\build.ps1
 ```
 
-也可用 `-Dotnet "C:\路径\dotnet.exe"` 指定 SDK。脚本先运行测试，再发布自带运行时的 win-x64 程序，复制 `packaging/` 中的便携配置，并生成 ZIP 和 SHA-256 校验文件。结果位于 `artifacts/日期时间/`，不会覆盖仓库中已有的下载包。
+也可用 `-Dotnet "C:\路径\dotnet.exe"` 指定 SDK。脚本先运行测试，再发布自带运行时的 win-x64 程序，复制 `packaging/` 中的便携配置，并生成 ZIP 和 SHA-256 校验文件。结果位于 `artifacts/日期时间/`，可据此重建运行包。
+
+GitHub Actions 在推送 `main` 或手动运行时，使用 Windows 2022 和 .NET SDK 8.0.425 调用同一脚本。两个资产均上传成功后才发布 `v1.9.1`，已有正式发布会跳过，已有未完成草稿会报错并保留。源码提交不包含本地旧 `downloads/` 目录中的压缩包，下载请使用上面的 Releases 链接。
 
 源码基础默认值仍为 F1～F5 记录、F6 发送，且默认关闭语音和发送；直接执行 `dotnet run` 不等于便携包配置。请使用上述脚本生成带 **Ctrl+1～5 / X / F7** 配置的完整包。没有 `portable.mode` 时，程序使用 `%LOCALAPPDATA%\LkfunTimer\settings.json`，首次运行可导入 `conf.ini`。
 
