@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Timer"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="闪现计时器 1.9.1" Height="630" Width="693" FontFamily="Consolas,Microsoft YaHei UI"  ResizeMode="NoResize" Closed="Window_Closed" x:Name="mainwindow" Icon="sanae.ico">
+        Title="闪现计时器 1.9.2" Height="630" Width="693" FontFamily="Consolas,Microsoft YaHei UI"  ResizeMode="NoResize" Closed="Window_Closed" x:Name="mainwindow" Icon="sanae.ico">
     <Window.Resources>
         <Style x:Key="BaseStyle">
             <Setter Property="Control.FontSize" Value="18"/>

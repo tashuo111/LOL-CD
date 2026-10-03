@@ -10,7 +10,7 @@ if ($env:OS -ne 'Windows_NT') {
 }
 
 $repoRoot = $PSScriptRoot
-$version = '1.9.1'
+$version = '1.9.2'
 $artifactRoot = Join-Path $repoRoot 'artifacts'
 $runDirectory = Join-Path $artifactRoot (Get-Date -Format 'yyyyMMdd-HHmmss-fff')
 $publishDirectory = Join-Path $runDirectory ('Timer-' + $version + '-win-x64')
@@ -26,7 +26,7 @@ try {
     New-Item -ItemType Directory -Path $publishDirectory -Force | Out-Null
     $testArguments = @('test', 'Timer.sln', '-c', 'Release', '--logger', 'trx;LogFileName=tests.trx', '--results-directory', $testDirectory)
     if ($SkipChineseVoiceTest) {
-        Write-Warning 'Chinese SAPI voice integration test is NOT executed. Only the other 31 tests will run; validate Chinese speech on a Windows computer with a Chinese voice installed.'
+        Write-Warning 'Chinese SAPI voice integration test is NOT executed. All other tests will run; validate Chinese speech on a Windows computer with a Chinese voice installed.'
         $testArguments += @('--filter', 'FullyQualifiedName!=Timer.Tests.VoiceTests.ChineseEngineProducesAudio')
     }
     & $Dotnet @testArguments

@@ -43,6 +43,36 @@ public class WindowTests
                 Invoke("JugButton_Click"); Assert.Matches("^top050[01] jug050[01]$", Text());
                 Invoke("TopClear_Click"); Assert.Matches("^jug050[01]$", Text());
                 Invoke("GameButton_Click"); Assert.Equal("", Text());
+                string[] positions = { "Top", "Jug", "Mid", "Bot", "Sup" };
+                string[] labels = { "TopLabel", "Jug", "Mid", "Bot", "Sup" };
+                string[] ticks = { "Toptimer_Tick", "Jugtimer_Tick", "Midtimer_Tick", "Bottimer_Tick", "Suptimer_Tick" };
+                string[] textNames = { "top", "jug", "mid", "ad", "sup" };
+                // All positions use the same haste result for countdown and generated recovery text.
+                foreach (var scenario in new[] {
+                    (Boots: false, Star: false, Other: "10:00", Mid: "10:00"),
+                    (Boots: false, Star: true, Other: "09:15", Mid: "09:15"),
+                    (Boots: true, Star: false, Other: "09:33", Mid: "09:10"),
+                    (Boots: true, Star: true, Other: "08:55", Mid: "08:38") })
+                {
+                    Invoke("GameButton_Click");
+                    long anchor = Environment.TickCount64;
+                    typeof(MainWindow).GetField("GameStartTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(window, anchor - 300000);
+                    var expectedText = new List<string>();
+                    for (int i = 0; i < positions.Length; i++)
+                    {
+                        ((CheckBox)window.FindName(positions[i] + "Boot")).IsChecked = scenario.Boots;
+                        ((CheckBox)window.FindName(positions[i] + "Star")).IsChecked = scenario.Star;
+                        Invoke(positions[i] + "Button_Click");
+                        typeof(MainWindow).GetField(positions[i] + "StartTime", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(window, anchor);
+                        Invoke(ticks[i]);
+                        string recovery = i == 2 ? scenario.Mid : scenario.Other;
+                        Assert.Contains("（" + recovery + "）", ((Label)window.FindName(labels[i])).Content.ToString());
+                        expectedText.Add(textNames[i] + recovery.Replace(":", ""));
+                    }
+                    typeof(MainWindow).GetMethod("RefreshTeamText", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(window, null);
+                    Assert.Equal(string.Join(" ", expectedText), Text());
+                }
+                Invoke("GameButton_Click"); Assert.Equal("", Text());
                 var settings = (TimerSettings)typeof(MainWindow).GetField("settings", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(window);
                 settings.MayhemMode = true;
                 typeof(MainWindow).GetMethod("UpdateModeLabels", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(window, null);

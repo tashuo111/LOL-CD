@@ -9,7 +9,7 @@ public partial class MainWindow
     private readonly StackPanel[] floorEditors = new StackPanel[5];
     private bool modeInitializing;
     private string PositionName(int index) => settings.MayhemMode ? $"{index + 1}楼" : TextGeneratorService.Roles[index];
-    private double CooldownFor(int index, bool boot, bool star) => settings.MayhemMode ? settings.MayhemCooldownSeconds[index] : 300 - (boot ? 30 : 0) - (star ? 15 : 0);
+    private double CooldownFor(int index, bool boot, bool star) => settings.MayhemMode ? settings.MayhemCooldownSeconds[index] : TimerUtil.FlashCooldownSeconds(index, boot, star);
     private void InitializeMode()
     {
         modeInitializing = true;
@@ -53,6 +53,8 @@ public partial class MainWindow
         for (int i = 0; i < 5; i++)
         {
             buttons[i].Content = settings.MayhemMode ? PositionName(i) : names[i];
+            boots[i].ToolTip = $"明朗鞋：+{(i == 2 ? 20 : 10)} 急速；与星界急速相加后计算闪现 CD。";
+            stars[i].ToolTip = "星界：+18 急速。闪现 CD = 300 ÷ (1 + 总急速 ÷ 100)。";
             boots[i].Visibility = stars[i].Visibility = settings.MayhemMode ? Visibility.Collapsed : Visibility.Visible;
             if (floorEditors[i] != null) floorEditors[i].Visibility = settings.MayhemMode ? Visibility.Visible : Visibility.Collapsed;
         }

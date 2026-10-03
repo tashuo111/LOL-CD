@@ -1,12 +1,12 @@
-# 闪现计时器 1.9.1
+# 闪现计时器 1.9.2
 
-这是基于 [lkfun/Timer](https://github.com/lkfun/Timer) 修改的独立个人备份，仓库保存当前 1.9.1 源码，便携运行包保存在 GitHub Releases。它不是原作者的官方新版，也不是 League Akari 或 Riot Games 的官方产品。
+这是基于 [lkfun/Timer](https://github.com/lkfun/Timer) 修改的独立个人备份，仓库保存当前 1.9.2 源码，便携运行包保存在 GitHub Releases。它不是原作者的官方新版，也不是 League Akari 或 Riot Games 的官方产品。
 
 ## 下载与运行 有封号风险  游戏内发送记录如果无法使用 可以用豆包 codex之类AI应用尝试修复
 
-[下载 Windows 64 位便携包](https://github.com/tashuo111/LOL-CD/releases/latest/download/Timer-1.9.1-win-x64.zip) · [SHA-256 校验值](https://github.com/tashuo111/LOL-CD/releases/latest/download/SHA256SUMS.txt)
+[下载 Windows 64 位便携包](https://github.com/tashuo111/LOL-CD/releases/latest/download/Timer-1.9.2-win-x64.zip) · [SHA-256 校验值](https://github.com/tashuo111/LOL-CD/releases/latest/download/SHA256SUMS.txt)
 
-适用 Windows 10/11 64 位。完整解压到可写文件夹后，直接双击 **Timer.exe**，无需脚本或另装 .NET。请保留整个目录；不要只复制 EXE。窗口标题显示“闪现计时器 1.9.1”。如果提示已运行，请先正常退出旧版。
+适用 Windows 10/11 64 位。完整解压到可写文件夹后，直接双击 **Timer.exe**，无需脚本或另装 .NET。请保留整个目录；不要只复制 EXE。窗口标题显示“闪现计时器 1.9.2”。如果提示已运行，请先正常退出旧版。
 
 包内的 `portable.mode` 使程序直接读取并保存同目录的 `settings.json`，不会读取旧电脑个人目录中的配置。请保留这两个文件。
 
@@ -37,7 +37,16 @@
 
 大乱斗的 **176.47 秒是本版本保留的默认预设**（300÷1.7），不是对当前官方版本、所有装备或海克斯强化组合的最新结论。请以游戏内实际 CD 为准并修改对应楼层的数值。程序不自动识别强化、装备、多充能或刷新效果。恢复时间向上取整到秒，避免提前提示。
 
-常规模式仍沿用原有规则：基础 300 秒、勾选明朗鞋减 30 秒、星界减 15 秒；未更新为当前赛季的急速计算模型。
+常规模式在 1.9.2 按用户指定的急速规则修正：基础闪现 300 秒，星界加 18 急速，中路明朗鞋加 20 急速，其余分路明朗鞋加 10 急速。两者直接相加，最终 CD = `300 ÷ (1 + 总急速 ÷ 100)`，不再直接减秒，也不额外相乘。主界面、浮窗与生成文本共用同一计算结果。
+
+| 勾选项 | 中路 CD | 其余分路 CD |
+| --- | --- | --- |
+| 无 | 300 秒 | 300 秒 |
+| 仅星界 | 约 254.24 秒 | 约 254.24 秒 |
+| 仅明朗鞋 | 250 秒 | 约 272.73 秒 |
+| 明朗鞋＋星界 | 约 217.39 秒 | 234.375 秒 |
+
+计算保留小数，预计恢复时间向上取整到秒。例如 05:00 记录双勾选的中路，恢复时间为 08:38，文本为 `mid0838`；其他位置为 08:55。大乱斗楼层输入的是含装备和强化的最终实际 CD，不再次叠加上述常规分路规则。
 
 语音依赖目标电脑的 Windows 语音引擎和音频设备。程序是手动计时器，不读取游戏技能状态。发送诊断保存在配置目录的 `last-send.json`，不记录消息正文。
 
@@ -51,11 +60,11 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 
 也可用 `-Dotnet "C:\路径\dotnet.exe"` 指定 SDK。脚本先运行测试，再发布自带运行时的 win-x64 程序，复制 `packaging/` 中的便携配置，并生成 ZIP 和 SHA-256 校验文件。结果位于 `artifacts/日期时间/`，可据此重建运行包。
 
-GitHub Actions 在推送 `main` 或手动运行时，使用 Windows 2022 和 .NET SDK 8.0.425 调用同一脚本。该 Windows 镜像没有中文 SAPI 语音引擎，因此 CI 显式传入 `-SkipChineseVoiceTest`，仅执行其余 **31 项**测试；脚本会输出警告，且任何已执行测试失败都会停止发布。两个资产均上传成功后才发布 `v1.9.1`，已有正式发布会跳过，已有未完成草稿会报错并保留。源码提交不包含本地旧 `downloads/` 目录中的压缩包，下载请使用上面的 Releases 链接。
+GitHub Actions 在推送 `main` 或手动运行时，使用 Windows 2022 和 .NET SDK 8.0.425 调用同一脚本。该 Windows 镜像没有中文 SAPI 语音引擎，因此 CI 显式传入 `-SkipChineseVoiceTest`，仅执行其余 **51 项**测试；脚本会输出警告，且任何已执行测试失败都会停止发布。两个资产均上传成功后才发布 `v1.9.2`，已有正式发布会跳过，已有未完成草稿会报错并保留。源码提交不包含本地旧 `downloads/` 目录中的压缩包，下载请使用上面的 Releases 链接。
 
 源码基础默认值仍为 F1～F5 记录、F6 发送，且默认关闭语音和发送；直接执行 `dotnet run` 不等于便携包配置。请使用上述脚本生成带 **Ctrl+1～5 / X / F7** 配置的完整包。没有 `portable.mode` 时，程序使用 `%LOCALAPPDATA%\LkfunTimer\settings.json`，首次运行可导入 `conf.ini`。
 
-本机带中文语音引擎的验证结果为 **32/32 通过**，其中包含中文语音音频生成测试。脚本默认仍执行全部 32 项；只有显式传入 `-SkipChineseVoiceTest` 才排除该项，中文语音未因此获得 CI 验证。其余测试覆盖计时与文本、快捷键、设置和发送流程；测试通过不代表真实 LOL 游戏内发送成功。
+本机带中文语音引擎的验证结果为 **52/52 通过**，其中包含中文语音音频生成测试。脚本默认仍执行全部 52 项；只有显式传入 `-SkipChineseVoiceTest` 才排除该项，中文语音未因此获得 CI 验证。其余测试覆盖计时与文本、快捷键、设置和发送流程；测试通过不代表真实 LOL 游戏内发送成功。
 
 ## 来源与参考
 

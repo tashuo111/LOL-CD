@@ -1,4 +1,4 @@
-name: Build and release 1.9.1
+name: Build and release 1.9.2
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: release-v1.9.1
+  group: release-v1.9.2
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           Set-StrictMode -Version Latest
-          $tag = 'v1.9.1'
+          $tag = 'v1.9.2'
           $repository = $env:GITHUB_REPOSITORY
           $api = "https://api.github.com/repos/$repository"
           $headers = @{
@@ -65,7 +65,7 @@ jobs:
             exit 0
           }
 
-          $packages = @(Get-ChildItem -LiteralPath 'artifacts' -Recurse -File -Filter 'Timer-1.9.1-win-x64.zip')
+          $packages = @(Get-ChildItem -LiteralPath 'artifacts' -Recurse -File -Filter 'Timer-1.9.2-win-x64.zip')
           if ($packages.Count -ne 1) { throw 'Expected exactly one package from the fresh build.' }
           $package = $packages[0]
           $checksum = Get-Item -LiteralPath (Join-Path $package.DirectoryName 'SHA256SUMS.txt')
@@ -76,20 +76,22 @@ jobs:
           }
 
           $notes = @'
-          当前个人备份最新版：闪现计时器 1.9.1，基于本仓库源码构建。
+          当前个人备份最新版：闪现计时器 1.9.2，基于本仓库源码构建。
+
+          1.9.2修正星界和明朗鞋CD：基础300秒，星界18急速；中路鞋子20急速、其他分路鞋子10急速。急速相加后计算300÷(1+总急速÷100)，倒计时、浮窗和生成文本一致。
 
           完整解压 Windows 64 位便携包后，双击 Timer.exe，无需安装 .NET。
           Ctrl+主键盘1～5记录，X松开尝试发送，F7生成并复制；只输出正在冷却的记录。
           支持常规与海克斯大乱斗模式，记录时静音、到期播报；大乱斗176.47秒仅为本版预设，请按游戏内实际CD调整。
 
           用户已确认X在当前电脑能成功发送，但换另一台电脑失败；存在环境兼容性差异，具体原因待诊断。若X未打开聊天框，请使用F7后手动Enter、Ctrl+V、Enter。
-          本机32项测试通过。云端运行31项测试；因托管机器没有中文SAPI语音引擎，中文发声集成测试仅在本机验证。这些测试不证明LOL游戏内发送成功。
+          本机52项测试通过。云端运行51项测试；因托管机器没有中文SAPI语音引擎，中文发声集成测试仅在本机验证。这些测试不证明LOL游戏内发送成功。
           SHA256SUMS.txt可用于校验压缩包。来源、配置与其他限制见仓库README。
           '@
           $createBody = @{
             tag_name = $tag
             target_commitish = $env:GITHUB_SHA
-            name = '闪现计时器 1.9.1 · Windows x64 便携版'
+            name = '闪现计时器 1.9.2 · Windows x64 便携版'
             body = $notes
             draft = $true
             prerelease = $false
